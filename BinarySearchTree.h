@@ -24,7 +24,7 @@ public:
 	{
 		NodePtrType y;
 		NodePtrType x = root_;
-		while (x != 0) {
+		while (x) {
 			y = x;
 			if (key < x->key_) {
 				x = x->left_;
@@ -33,7 +33,28 @@ public:
 			}
 		}
 		NodePtrType node = NodePtrType(new Node<T>(key));
-		std::cout << *node << std::endl;
+		node->prev_ = y;
+		if (!y) {
+			root_ = node;
+		} else if (node->key_ < y->key_){
+			y->left_ = node;
+		} else {
+			y->right_ = node;
+		}
+	}
+
+	void inOrderTreeWalk()
+	{
+		inOrderTreeWalk(root_);
+	}
+
+	void inOrderTreeWalk(const NodePtrType& node)
+	{
+		if (node) {
+			inOrderTreeWalk(node->left_);
+			std::cout << node->key_ << " ";
+			inOrderTreeWalk(node->right_);
+		}
 	}
 
 private:
