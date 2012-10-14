@@ -8,6 +8,13 @@
 #include <queue>
 #include <boost/shared_ptr.hpp>
 
+/**
+ * An implementation of a red black tree.
+ * Reference: Introduction to Algorithms, CLRS, 3rd Edition
+ *
+ * @author: ahmed
+ */
+
 enum Colour { RED, BLACK };
 
 template <typename T>
