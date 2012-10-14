@@ -67,6 +67,68 @@ public:
     insertFixup(z);
   }
 
+  std::list<NodePtrType> inOrderTreeWalk()
+  {
+    std::list<NodePtrType> list;
+    inOrderTreeWalk(root_, list);
+    return list;
+  }
+
+  // recursive depth first traverse
+  std::list<NodePtrType> depthFirstTraverse_r()
+  {
+    setNodesUnvisited();
+    std::list<NodePtrType> depthList;
+    depthFirstTraverse_r(root_, depthList);
+    return depthList;
+  }
+
+  // iterative depth first traverse
+  std::list<NodePtrType> depthFirstTraverse_i()
+  {
+    setNodesUnvisited();
+    std::list<NodePtrType> depthList;
+    depthFirstTraverse_i(root_, depthList);
+    return depthList;
+  }
+
+  // Level order search
+  std::list<NodePtrType> breadthFirstTraverse()
+  {
+    setNodesUnvisited();
+    std::list<NodePtrType> list;
+    breadthFirstTraverse(root_, list);
+    return list;
+  }
+
+  std::string dotFormat() const
+  {
+    std::ostringstream os;
+    os << "digraph G {\n";
+    os << "\tnodesep=1.0;\n";
+    os << "\tnode [shape=circle];\n";
+    std::stack<NodePtrType> stack;
+    stack.push(root_);
+    while (!stack.empty()) {
+      NodePtrType node = stack.top();
+      stack.pop();
+      if (node) {
+	if (node->left_) {
+	  os << "\t\"" << node->key_ << "\" -> \"" << node->left_->key_ << "\";\n";
+	  stack.push(node->left_);
+	}
+	if (node->right_) {
+	  os << "\t\"" << node->key_ << "\" -> \"" << node->right_->key_ << "\";\n";
+	  stack.push(node->right_);
+	}	
+      }
+    }
+    os << "}";
+    return os.str();
+  }
+    
+private:
+
   void insertFixup(NodePtrType& z)
   {
     while (z && z != root_ && colourOf(parentOf(z)) == RED) {
@@ -169,13 +231,6 @@ public:
       return nullNode;
   }
 
-  std::list<NodePtrType> inOrderTreeWalk()
-  {
-    std::list<NodePtrType> list;
-    inOrderTreeWalk(root_, list);
-    return list;
-  }
-
   void inOrderTreeWalk(const NodePtrType& node, std::list<NodePtrType>& list)
   {
     if (node) {
@@ -183,14 +238,6 @@ public:
       list.push_back(node);
       inOrderTreeWalk(node->right_, list);
     }
-  }
-
-  std::list<NodePtrType> depthFirstTraverse_r()
-  {
-    setNodesUnvisited();
-    std::list<NodePtrType> depthList;
-    depthFirstTraverse_r(root_, depthList);
-    return depthList;
   }
 
   // recursive depth first traverse
@@ -203,14 +250,6 @@ public:
       depthFirstTraverse(node->right_, depthList);
       depthList.push_front(node->key_);
     }
-  }
-
-  std::list<NodePtrType> depthFirstTraverse_i()
-  {
-    setNodesUnvisited();
-    std::list<NodePtrType> depthList;
-    depthFirstTraverse_i(root_, depthList);
-    return depthList;
   }
 
   // iterative depth first traverse
@@ -228,14 +267,6 @@ public:
 	list.push_front(n);
       }
     }
-  }
-
-  std::list<NodePtrType> breadthFirstTraverse()
-  {
-    setNodesUnvisited();
-    std::list<NodePtrType> list;
-    breadthFirstTraverse(root_, list);
-    return list;
   }
 
   void breadthFirstTraverse(const NodePtrType& node, std::list<NodePtrType>& list)
@@ -264,33 +295,6 @@ public:
     }
   }
 
-  std::string dotFormat() const
-  {
-    std::ostringstream os;
-    os << "digraph G {\n";
-    os << "\tnodesep=1.0;\n";
-    os << "\tnode [shape=circle];\n";
-    std::stack<NodePtrType> stack;
-    stack.push(root_);
-    while (!stack.empty()) {
-      NodePtrType node = stack.top();
-      stack.pop();
-      if (node) {
-	if (node->left_) {
-	  os << "\t\"" << node->key_ << "\" -> \"" << node->left_->key_ << "\";\n";
-	  stack.push(node->left_);
-	}
-	if (node->right_) {
-	  os << "\t\"" << node->key_ << "\" -> \"" << node->right_->key_ << "\";\n";
-	  stack.push(node->right_);
-	}	
-      }
-    }
-    os << "}";
-    return os.str();
-  }
-    
-private:
   RedBlackTree(const RedBlackTree&);
   RedBlackTree& operator=(const RedBlackTree&);
   NodePtrType root_;
