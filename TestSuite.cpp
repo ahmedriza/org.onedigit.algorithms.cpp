@@ -88,10 +88,17 @@ void testTokenize()
   }
 }
 
+void testIntToRoman(int n)
+{
+  std::string s = intToRoman(n);
+  std::cout << s << std::endl;
+}
+
 int main(int argc, char** argv)
 {
   // testReverseString();
-  testReverseWords();
+  // testReverseWords();
   // testTokenize();
+  testIntToRoman(73);
   return 0;
 }

@@ -4,6 +4,8 @@
 #include <string>
 #include <string.h>
 #include <vector>
+#include <map>
+#include <sstream>
 
 /**
  * Reverse a null terminated string in place
@@ -60,6 +62,38 @@ void reverseWords(char* phrase, const char sep)
     if (*q) q++;
     p = q;
   }
+}
+
+/**
+ * Convert an integer into Roman numerals
+ * n must be in the range 1 to 3999
+ */
+std::string intToRoman(int n)
+{
+  // 1, 5, 10, 50, 100, 500, 1000
+  // I, V, X, L, C, D, M
+  //
+  // The number must be arranged with highest letters first.
+  // E.g. 1511 = MDXI and not IXDM
+  // I, X, C, M can only be repeated 3 times in succession
+  // D, L, V can never be repeated in succession
+  // I can be subtracted from V and X only
+  // X can be subtracted from L and C only
+  // C can be subtracted from D and M only
+  // V, L, D can never be subtracted
+  // Only one small value symbol may be subtracted from any large value symbol
+  int num[13] = 
+    {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+  const char* str[13] = 
+    {"M", "XM", "D", "MD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+  std::ostringstream os;
+  for (int i = 0; i < 13; i++) {
+    while (n >= num[i]) {
+      n -= num[i];
+      os << str[i];
+    }
+  }
+  return os.str();
 }
 
 #endif /* STRING_UTILS_H */
